@@ -5,7 +5,10 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "create-admin": "node createAdmin.js",
+    "verify-leads": "node utils/verifyLeadUniqueness.js",
+    "merge-duplicates": "node utils/mergeDuplicateLeads.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

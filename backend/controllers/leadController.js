@@ -107,10 +107,22 @@ exports.createLead = async (req, res) => {
             });
         }
 
-        // Track demo requested immediately on creation/update via form
+        // Determine engagement field to increment based on source
+        let engagementField = 'demo_requested'; // default
+        if (source === 'Contact Form') {
+            engagementField = 'email_open_count';
+        } else if (source === 'Demo Request') {
+            engagementField = 'demo_requested';
+        } else if (source === 'Signup') {
+            engagementField = 'email_open_count';
+        } else {
+            engagementField = 'website_visits'; // for 'Website' or other sources
+        }
+
+        // Track engagement based on source type
         lead = await Lead.findByIdAndUpdate(
             lead._id,
-            { $inc: { 'engagement.demo_requested': 1 } },
+            { $inc: { [`engagement.${engagementField}`]: 1 } },
             { new: true }
         );
 
@@ -123,6 +135,31 @@ exports.createLead = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Server error while creating lead'
+        });
+    }
+};
+
+exports.getLead = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const lead = await Lead.findById(id);
+
+        if (!lead) {
+            return res.status(404).json({
+                success: false,
+                message: 'Lead not found'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            data: lead
+        });
+    } catch (error) {
+        console.error('Get Lead Error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error while fetching lead'
         });
     }
 };
