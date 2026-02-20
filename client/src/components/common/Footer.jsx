@@ -12,7 +12,7 @@ const Footer = () => {
                     <div>
                         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'white', fontWeight: 'bold', fontSize: '1.25rem', marginBottom: '1.5rem' }}>
                             <Bot size={24} color="var(--primary-color)" />
-                            <span>LeadPulse AI</span>
+                            <span>I TECH SOLUTIONS</span>
                         </Link>
                         <p style={{ fontSize: '0.9rem', maxWidth: '300px', color: '#9ca3af' }}>
                             Next-generation behavioral intelligence for modern enterprises.
@@ -47,7 +47,7 @@ const Footer = () => {
                 </div>
 
                 <div style={{ borderTop: '1px solid var(--glass-border)', paddingTop: '2rem', textAlign: 'center', fontSize: '0.875rem', color: '#6b7280' }}>
-                    &copy; {new Date().getFullYear()} LeadPulse AI. All rights reserved.
+                    &copy; {new Date().getFullYear()} I TECH SOLUTIONS. All rights reserved.
                 </div>
             </div>
         </footer>

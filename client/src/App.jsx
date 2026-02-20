@@ -11,6 +11,8 @@ import DemoRequest from './pages/DemoRequest';
 import Contact from './pages/Contact';
 import AdminDashboard from './pages/AdminDashboard';
 import NotFound from './pages/NotFound';
+import ServiceDetail from './pages/ServiceDetail';
+import Profile from './pages/Profile';
 
 // Components
 import AdminRoute from './components/AdminRoute';
@@ -22,6 +24,8 @@ function App() {
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/services" element={<Products />} />
+        <Route path="/services/:slug" element={<ServiceDetail />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/demo-request" element={<DemoRequest />} />
         <Route path="/contact" element={<Contact />} />
@@ -29,6 +33,7 @@ function App() {
         {/* Auth Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/profile" element={<Profile />} />
 
 
         {/* Protected Admin Routes */}

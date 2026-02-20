@@ -32,7 +32,7 @@ const AdminDashboard = () => {
                         <BarChart2 size={20} color="#60a5fa" />
                     </div>
                     <div>
-                        <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>LeadPulse</h2>
+                        <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>I TECH</h2>
                         <span style={{ fontSize: '0.75rem', color: '#60a5fa', letterSpacing: '1px', fontWeight: '600' }}>ADMIN CONSOLE</span>
                     </div>
                 </div>

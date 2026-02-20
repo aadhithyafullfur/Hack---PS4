@@ -115,7 +115,7 @@ const Home = () => {
                                 Most teams struggle to connect the dots between clicks, leads, and revenue. Manual spreadsheets are slow, error-prone, and provide zero predictive value.
                             </p>
                             <p style={{ fontSize: '1.1rem', marginBottom: '2rem' }}>
-                                LeadPulse eliminates the guesswork by unifying your stack into a single source of truth.
+                                I TECH eliminates the guesswork by unifying your stack into a single source of truth.
                             </p>
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -146,7 +146,7 @@ const Home = () => {
             <section className="section">
                 <div className="container">
                     <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-                        <h2 style={{ fontSize: '2.5rem' }}>Why Growing Teams Choose LeadPulse</h2>
+                        <h2 style={{ fontSize: '2.5rem' }}>Why Growing Teams Choose I TECH</h2>
                     </div>
                     <div className="grid grid-cols-4 gap-8" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
                         {[

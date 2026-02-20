@@ -18,7 +18,7 @@ const Navbar = () => {
             <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'white', fontWeight: 'bold', fontSize: '1.5rem' }}>
                     <Bot size={28} color="var(--primary-color)" />
-                    <span>LeadPulse AI</span>
+                    <span>I TECH SOLUTIONS</span>
                 </Link>
 
                 {/* Mobile Menu Toggle */}
@@ -35,9 +35,11 @@ const Navbar = () => {
                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginLeft: '1rem' }}>
                         {user ? (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', fontWeight: 'bold' }}>
-                                    {user.fullName ? user.fullName.charAt(0).toUpperCase() : 'U'}
-                                </div>
+                                <Link to="/profile" style={{ textDecoration: 'none', color: 'inherit' }}>
+                                    <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', fontWeight: 'bold' }}>
+                                        {user.fullName ? user.fullName.charAt(0).toUpperCase() : 'U'}
+                                    </div>
+                                </Link>
                                 <button onClick={handleLogout} className="btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.875rem', borderRadius: '8px' }}>Sign Out</button>
                             </div>
                         ) : (
