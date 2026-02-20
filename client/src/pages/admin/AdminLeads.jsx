@@ -241,6 +241,18 @@ const AdminLeads = () => {
                     fontSize: "0.75rem",
                   }}
                 >
+                  Conv. Prob.
+                </th>
+                <th
+                  style={{
+                    padding: "1.2rem 1.5rem",
+                    color: "#9ca3af",
+                    fontWeight: "600",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.5px",
+                    fontSize: "0.75rem",
+                  }}
+                >
                   Source
                 </th>
                 <th
@@ -323,6 +335,9 @@ const AdminLeads = () => {
                   </td>
                   <td style={{ padding: "1.2rem 1.5rem", color: "#e2e8f0" }}>
                     {lead.service || "-"}
+                  </td>
+                  <td style={{ padding: "1.2rem 1.5rem", color: "#e2e8f0" }}>
+                    {(lead.mlPrediction?.conversionProbability * 100).toFixed(1)}%
                   </td>
                   <td style={{ padding: "1.2rem 1.5rem", color: "#9ca3af" }}>
                     {lead.source}
@@ -1247,6 +1262,281 @@ const AdminLeads = () => {
                   </div>
                 )}
               </div>
+
+              {/* ML Prediction Analytics */}
+              {selectedLead.mlPrediction && (
+                <div>
+                  <label
+                    style={{
+                      display: "block",
+                      fontSize: "0.75rem",
+                      color: "#9ca3af",
+                      marginBottom: "0.6rem",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.5px",
+                      borderBottom: "1px dashed rgba(255,255,255,0.1)",
+                      paddingBottom: "0.4rem",
+                    }}
+                  >
+                    ML Conversion Prediction
+                  </label>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(4, 1fr)",
+                      gap: "1rem",
+                      marginBottom: "1rem",
+                    }}
+                  >
+                    <div
+                      style={{
+                        background: "rgba(34, 197, 94, 0.05)",
+                        border: "1px solid rgba(34, 197, 94, 0.2)",
+                        padding: "1rem",
+                        borderRadius: "8px",
+                        textAlign: "center",
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: "1.5rem",
+                          fontWeight: "bold",
+                          color: "#22c55e",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        {(selectedLead.mlPrediction.conversionProbability * 100).toFixed(1)}%
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "0.7rem",
+                          color: "#9ca3af",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                        }}
+                      >
+                        Conversion Prob.
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        background: "rgba(59, 130, 246, 0.05)",
+                        border: "1px solid rgba(59, 130, 246, 0.2)",
+                        padding: "1rem",
+                        borderRadius: "8px",
+                        textAlign: "center",
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: "1.5rem",
+                          fontWeight: "bold",
+                          color: "#3b82f6",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        {selectedLead.mlPrediction.qualityGrade}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "0.7rem",
+                          color: "#9ca3af",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                        }}
+                      >
+                        Quality Grade
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        background: "rgba(168, 85, 247, 0.05)",
+                        border: "1px solid rgba(168, 85, 247, 0.2)",
+                        padding: "1rem",
+                        borderRadius: "8px",
+                        textAlign: "center",
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: "1.5rem",
+                          fontWeight: "bold",
+                          color: "#a855f7",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        {selectedLead.mlPrediction.predictedScore.toFixed(1)}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "0.7rem",
+                          color: "#9ca3af",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                        }}
+                      >
+                        Score (0-100)
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        background: "rgba(245, 158, 11, 0.05)",
+                        border: "1px solid rgba(245, 158, 11, 0.2)",
+                        padding: "1rem",
+                        borderRadius: "8px",
+                        textAlign: "center",
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: "1.5rem",
+                          fontWeight: "bold",
+                          color: "#f59e0b",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        {new Date(selectedLead.mlPrediction.lastPredicted).toLocaleDateString()}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "0.7rem",
+                          color: "#9ca3af",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                        }}
+                      >
+                        Last Predicted
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Feature Breakdown */}
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(4, 1fr)",
+                      gap: "1rem",
+                    }}
+                  >
+                    <div
+                      style={{
+                        background: "rgba(255,255,255,0.02)",
+                        border: "1px solid rgba(255,255,255,0.05)",
+                        padding: "1rem",
+                        borderRadius: "8px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: "0.7rem",
+                          color: "#9ca3af",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        Email Engagement
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "1.2rem",
+                          fontWeight: "bold",
+                          color: "#8b5cf6",
+                        }}
+                      >
+                        {selectedLead.mlPrediction.features?.emailEngagement?.toFixed(2) || 0}
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        background: "rgba(255,255,255,0.02)",
+                        border: "1px solid rgba(255,255,255,0.05)",
+                        padding: "1rem",
+                        borderRadius: "8px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: "0.7rem",
+                          color: "#9ca3af",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        Visit Frequency
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "1.2rem",
+                          fontWeight: "bold",
+                          color: "#60a5fa",
+                        }}
+                      >
+                        {selectedLead.mlPrediction.features?.visitFrequency?.toFixed(2) || 0}
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        background: "rgba(255,255,255,0.02)",
+                        border: "1px solid rgba(255,255,255,0.05)",
+                        padding: "1rem",
+                        borderRadius: "8px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: "0.7rem",
+                          color: "#9ca3af",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        Pricing Interest
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "1.2rem",
+                          fontWeight: "bold",
+                          color: "#10b981",
+                        }}
+                      >
+                        {selectedLead.mlPrediction.features?.pricingInterest?.toFixed(2) || 0}
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        background: "rgba(255,255,255,0.02)",
+                        border: "1px solid rgba(255,255,255,0.05)",
+                        padding: "1rem",
+                        borderRadius: "8px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: "0.7rem",
+                          color: "#9ca3af",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        Demo Interest
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "1.2rem",
+                          fontWeight: "bold",
+                          color: "#f59e0b",
+                        }}
+                      >
+                        {selectedLead.mlPrediction.features?.demoInterest?.toFixed(2) || 0}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Recent Activity Log */}
               {selectedLead.engagement?.activity_log &&

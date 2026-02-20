@@ -5,6 +5,8 @@ const {
   createLead,
   getLeads,
   getLead,
+  updateLeadPrediction,
+  updateAllLeadsPredictions,
 } = require("../controllers/leadController");
 const router = express.Router();
 
@@ -22,5 +24,9 @@ router.patch("/:id/engagement", updateEngagement);
 
 // Track email open directly from an image tag
 router.get("/:id/pixel.gif", trackEmailOpen);
+
+// ML prediction endpoints
+router.patch("/:id/predict", updateLeadPrediction);
+router.patch("/predict-all", updateAllLeadsPredictions);
 
 module.exports = router;

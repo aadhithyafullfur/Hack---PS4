@@ -1,4 +1,9 @@
 const Lead = require('../models/Lead');
+const {
+  updateLeadPrediction,
+  calculateFeatures,
+  updateAllLeadsPredictions: updateAllLeadsPredictionsUtil
+} = require('../utils/mlPrediction');
 
 // Whitelist of allowed engagement fields to prevent injection
 const ALLOWED_ENGAGEMENT_FIELDS = [
@@ -126,6 +131,16 @@ exports.createLead = async (req, res) => {
             { new: true }
         );
 
+        // Update ML prediction based on new engagement data
+        try {
+            await updateLeadPrediction(lead._id);
+            // Fetch the updated lead with new prediction
+            lead = await Lead.findById(lead._id);
+        } catch (predError) {
+            console.error('Error updating ML prediction:', predError.message);
+            // Continue with response even if prediction update fails
+        }
+
         res.status(201).json({
             success: true,
             data: lead
@@ -160,6 +175,48 @@ exports.getLead = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Server error while fetching lead'
+        });
+    }
+};
+
+// Endpoint to update ML prediction for a specific lead
+exports.updateLeadPrediction = async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        const lead = await updateLeadPrediction(id);
+        
+        res.status(200).json({
+            success: true,
+            data: lead,
+            message: 'Lead prediction updated successfully'
+        });
+    } catch (error) {
+        console.error('Update Lead Prediction Error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error while updating lead prediction',
+            error: error.message
+        });
+    }
+};
+
+// Endpoint to update ML predictions for all leads
+exports.updateAllLeadsPredictions = async (req, res) => {
+    try {
+        const results = await updateAllLeadsPredictionsUtil();
+        
+        res.status(200).json({
+            success: true,
+            count: results.length,
+            message: `Successfully updated predictions for ${results.length} leads`
+        });
+    } catch (error) {
+        console.error('Update All Leads Predictions Error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error while updating all leads predictions',
+            error: error.message
         });
     }
 };
