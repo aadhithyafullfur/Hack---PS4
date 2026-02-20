@@ -2,16 +2,18 @@ import React, { useState } from 'react';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { Check, X, HelpCircle, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { incrementEngagement } from '../utils/engagementTracker';
 
 const Pricing = () => {
     const [isAnnual, setIsAnnual] = useState(false);
+    const navigate = useNavigate();
 
     // Pricing plan data
     const plans = [
         {
             name: "Professional",
-            price: isAnnual ? 135 : 159,
+            price: isAnnual ? 127 : 159,
             audience: "Best for teams tracking essential metrics",
             features: [
                 "Unlimited Users",
@@ -23,7 +25,6 @@ const Pricing = () => {
                 "API & SDK Integrations"
             ],
             cta: "Start Free Trial",
-            ctaLink: "/signup",
             highlight: false
         },
         {
@@ -39,7 +40,6 @@ const Pricing = () => {
                 "Dataset Creation Tools"
             ],
             cta: "Start Free Trial",
-            ctaLink: "/signup",
             highlight: true
         },
         {
@@ -55,10 +55,27 @@ const Pricing = () => {
                 "OKRs & Company Benchmarks"
             ],
             cta: "Contact Sales",
-            ctaLink: "/contact",
             highlight: false
         }
     ];
+
+    const handlePlanClick = (plan) => {
+        incrementEngagement('pricing_page_click');
+        
+        if (plan.cta === "Contact Sales") {
+            navigate('/contact');
+        } else {
+            // Navigate to checkout with plan details
+            navigate('/checkout', {
+                state: {
+                    planName: plan.name,
+                    price: plan.price,
+                    billing: isAnnual ? 'annual' : 'monthly',
+                    features: plan.features
+                }
+            });
+        }
+    };
 
     // Feature comparison data
     const comparisonFeatures = [
@@ -149,9 +166,13 @@ const Pricing = () => {
                                     {isAnnual ? 'Billed annually' : 'Billed monthly'}
                                 </p>
 
-                                <Link to={plan.ctaLink} className={`btn ${plan.highlight ? 'btn-primary' : 'btn-secondary'}`} style={{ width: '100%', marginBottom: '1rem' }}>
+                                <button
+                                    onClick={() => handlePlanClick(plan)}
+                                    className={`btn ${plan.highlight ? 'btn-primary' : 'btn-secondary'}`}
+                                    style={{ width: '100%', marginBottom: '1rem', cursor: 'pointer' }}
+                                >
                                     {plan.cta}
-                                </Link>
+                                </button>
 
                                 {plan.cta === "Start Free Trial" && (
                                     <p style={{ textAlign: 'center', fontSize: '0.8rem', color: '#6b7280', marginBottom: '2rem' }}>No credit card required</p>

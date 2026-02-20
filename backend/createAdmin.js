@@ -9,16 +9,16 @@ const createAdmin = async () => {
         await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/auth-demo');
         console.log('MongoDB Connected');
 
-        const adminExists = await User.findOne({ email: 'admin@leadpulse.ai' });
+        const adminExists = await User.findOne({ email: 'admin@itech.com' });
         if (adminExists) {
             console.log('Admin user already exists');
             process.exit();
         }
 
         const admin = await User.create({
-            fullName: 'System Administrator',
-            email: 'admin@leadpulse.ai',
-            password: 'adminpassword123', // In a real app, use environment variable or prompt
+            fullName: 'I TECH Admin',
+            email: 'admin@itech.com',
+            password: 'AdminPassword123!',
             role: 'admin',
         });
 

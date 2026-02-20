@@ -39,10 +39,13 @@ const Signup = () => {
                 password: formData.password,
             });
 
-            const { token, role, ...userData } = response.data;
+            const { token, role, leadId, ...userData } = response.data;
 
             localStorage.setItem('token', token);
-            localStorage.setItem('user', JSON.stringify({ ...userData, role }));
+            localStorage.setItem('user', JSON.stringify({ ...userData, role, leadId }));
+            if (leadId) {
+                localStorage.setItem('leadId', leadId);
+            }
 
             // New users differ to Home Page as they are 'user' role by default
             navigate('/');

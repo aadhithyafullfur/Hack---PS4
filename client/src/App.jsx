@@ -7,9 +7,15 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Products from './pages/Products';
 import Pricing from './pages/Pricing';
+import Checkout from './pages/Checkout';
 import DemoRequest from './pages/DemoRequest';
 import Contact from './pages/Contact';
-import AdminDashboard from './pages/AdminDashboard';
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminOverview from './pages/admin/AdminOverview';
+import AdminLeads from './pages/admin/AdminLeads';
+import AdminAnalytics from './pages/admin/AdminAnalytics';
+import AdminSettings from './pages/admin/AdminSettings';
+import AdminSubscriptions from './pages/admin/AdminSubscriptions';
 import NotFound from './pages/NotFound';
 import ServiceDetail from './pages/ServiceDetail';
 import Profile from './pages/Profile';
@@ -27,6 +33,7 @@ function App() {
         <Route path="/services" element={<Products />} />
         <Route path="/services/:slug" element={<ServiceDetail />} />
         <Route path="/pricing" element={<Pricing />} />
+        <Route path="/checkout" element={<Checkout />} />
         <Route path="/demo-request" element={<DemoRequest />} />
         <Route path="/contact" element={<Contact />} />
 
@@ -41,10 +48,16 @@ function App() {
           path="/admin"
           element={
             <AdminRoute>
-              <AdminDashboard />
+              <AdminLayout />
             </AdminRoute>
           }
-        />
+        >
+          <Route index element={<AdminOverview />} />
+          <Route path="leads" element={<AdminLeads />} />
+          <Route path="subscriptions" element={<AdminSubscriptions />} />
+          <Route path="analytics" element={<AdminAnalytics />} />
+          <Route path="settings" element={<AdminSettings />} />
+        </Route>
 
         {/* 404 Route - Catches all unmatched routes */}
         <Route path="*" element={<NotFound />} />

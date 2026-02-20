@@ -3,8 +3,12 @@ import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { ArrowRight, Activity, Zap, Layers, BarChart, Database, Layout, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { incrementEngagement } from '../utils/engagementTracker';
 
 const Home = () => {
+    React.useEffect(() => {
+        incrementEngagement('website_visits');
+    }, []);
     return (
         <>
             <Navbar />

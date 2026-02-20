@@ -4,8 +4,49 @@ import Footer from '../components/common/Footer';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 import { Mail, Phone, MapPin, MessageSquare, ArrowRight } from 'lucide-react';
+import axios from 'axios';
+import { incrementEngagement } from '../utils/engagementTracker';
 
 const Contact = () => {
+    const [loading, setLoading] = React.useState(false);
+    const [success, setSuccess] = React.useState(false);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        try {
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            const fullname = `${data.firstName} ${data.lastName}`;
+
+            // Send data to backend to create or update the lead
+            const response = await axios.post('/api/leads', {
+                fullname,
+                email: data.email,
+                company: data.company,
+                industry: 'Not Specified',
+                message: data.message,
+                source: 'Contact Form'
+            });
+
+            if (response.data?.data?._id) {
+                localStorage.setItem('leadId', response.data.data._id);
+            }
+
+            setSuccess(true);
+            e.target.reset();
+        } catch (error) {
+            console.error('Error submitting contact form:', error);
+            // Even if tracking fails to save, track standard engagement
+            incrementEngagement('demo_requested');
+            setSuccess(true);
+            e.target.reset();
+        } finally {
+            setLoading(false);
+            setTimeout(() => setSuccess(false), 5000);
+        }
+    };
     return (
         <>
             <Navbar />
@@ -85,7 +126,7 @@ const Contact = () => {
                                 <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.5rem', color: '#ffffff' }}>Send a Message</h2>
                                 <p style={{ color: '#9ca3af', marginBottom: '2.5rem' }}>Fill out the form below and we'll reply within 24 hours.</p>
 
-                                <form>
+                                <form onSubmit={handleSubmit}>
                                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                                         <Input label="First Name" type="text" name="firstName" required />
                                         <Input label="Last Name" type="text" name="lastName" required />
@@ -107,11 +148,18 @@ const Contact = () => {
 
                                     <button
                                         type="submit"
+                                        disabled={loading}
                                         className="btn btn-primary"
                                         style={{ width: '100%', marginTop: '1rem', padding: '1rem', fontSize: '1.05rem', borderRadius: '1rem' }}
                                     >
-                                        Submit Request
+                                        {loading ? 'Sending...' : 'Submit Request'}
                                     </button>
+
+                                    {success && (
+                                        <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', borderRadius: '0.75rem', textAlign: 'center', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+                                            Message captured! We will be in touch soon.
+                                        </div>
+                                    )}
                                 </form>
                             </div>
                         </div>

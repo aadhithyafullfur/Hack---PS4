@@ -1,6 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const Lead = require('../models/Lead');
 const router = express.Router();
 
 // Generate JWT Token
@@ -34,6 +35,43 @@ router.post('/signup', async (req, res) => {
             password,
         });
 
+        // Automatically store the signed up user as a lead (or update existing)
+        let leadId = null;
+        try {
+            if (user.role !== 'admin') {
+                // Use upsert to create or update lead
+                const lead = await Lead.findOneAndUpdate(
+                    { email: email.toLowerCase().trim() },
+                    {
+                        $set: {
+                            name: fullName
+                        },
+                        $setOnInsert: {
+                            source: 'Signup',
+                            status: 'New',
+                            message: 'User registered via Signup page.',
+                            engagement: {
+                                email_open_count: 0,
+                                website_visits: 0,
+                                pricing_page_click: 0,
+                                demo_requested: 0
+                            }
+                        },
+                        $addToSet: { leadSourceType: 'Signup' }
+                    },
+                    {
+                        new: true,
+                        upsert: true,
+                        runValidators: true,
+                        setDefaultsOnInsert: true
+                    }
+                );
+                leadId = lead._id;
+            }
+        } catch (leadError) {
+            console.error('Error creating/updating lead off user signup:', leadError);
+        }
+
         if (user) {
             const token = generateToken(user._id);
 
@@ -42,6 +80,7 @@ router.post('/signup', async (req, res) => {
                 fullName: user.fullName,
                 email: user.email,
                 role: user.role, // Return role
+                leadId, // Return tracking ID mapped to Lead
                 token,
             });
         } else {
@@ -67,11 +106,15 @@ router.post('/login', async (req, res) => {
         const user = await User.findOne({ email });
 
         if (user && (await user.isValidPassword(password))) {
+            const lead = await Lead.findOne({ email });
+            const leadId = lead ? lead._id : null;
+
             res.json({
                 _id: user._id,
                 fullName: user.fullName,
                 email: user.email,
                 role: user.role, // Return role
+                leadId, // Return tracking ID mapped to Lead
                 token: generateToken(user._id),
             });
         } else {

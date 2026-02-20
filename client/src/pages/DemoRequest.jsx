@@ -3,13 +3,45 @@ import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
+import axios from 'axios';
+import { incrementEngagement } from '../utils/engagementTracker';
 
 const DemoRequest = () => {
     const [submitted, setSubmitted] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setTimeout(() => setSubmitted(true), 1500);
+        setLoading(true);
+
+        try {
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            // Send data to backend to create or update the lead
+            const response = await axios.post('/api/leads', {
+                fullname: data.fullname,
+                email: data.email,
+                company: data.company,
+                industry: data.industry,
+                message: data.message,
+                source: 'Website Demo Request'
+            });
+
+            // Ensure tracking works for future engagements in this session
+            if (response.data?.data?._id) {
+                localStorage.setItem('leadId', response.data.data._id);
+            }
+
+            setSubmitted(true);
+        } catch (error) {
+            console.error('Error submitting demo request:', error);
+            // Fallback UI logic - track anyway
+            incrementEngagement('demo_requested');
+            setSubmitted(true);
+        } finally {
+            setLoading(false);
+        }
     };
 
     if (submitted) {
@@ -71,7 +103,9 @@ const DemoRequest = () => {
                                 <textarea id="message" name="message" className="input-field" rows="3"></textarea>
                             </div>
 
-                            <Button type="submit">Submit Request</Button>
+                            <Button type="submit" loading={loading} disabled={loading}>
+                                Submit Request
+                            </Button>
                         </form>
                     </div>
                 </div>

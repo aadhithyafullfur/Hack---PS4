@@ -3,6 +3,8 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/auth');
+const leadRoutes = require('./routes/leadRoutes');
+const subscriptionRoutes = require('./routes/subscriptionRoutes');
 
 dotenv.config();
 
@@ -15,6 +17,8 @@ app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/leads', leadRoutes);
+app.use('/api/subscriptions', subscriptionRoutes);
 
 // Root route
 app.get('/', (req, res) => {

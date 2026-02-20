@@ -22,6 +22,26 @@ const userSchema = new mongoose.Schema({
         enum: ['user', 'admin'],
         default: 'user',
     },
+    subscription: {
+        plan: {
+            type: String,
+            enum: ['Professional', 'Growth', 'Premium', null],
+            default: null
+        },
+        status: {
+            type: String,
+            enum: ['active', 'cancelled', 'expired', 'trial', null],
+            default: null
+        },
+        billing: {
+            type: String,
+            enum: ['monthly', 'annual', null],
+            default: null
+        }
+    },
+    company: {
+        type: String
+    },
     createdAt: {
         type: Date,
         default: Date.now,

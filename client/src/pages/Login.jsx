@@ -26,11 +26,15 @@ const Login = () => {
 
         try {
             const response = await axios.post('/api/auth/login', formData);
-            const { token, role, ...userData } = response.data;
+            const { token, role, leadId, ...userData } = response.data;
 
-            // Store user data explicitly including role
+            // Store user data explicitly including role and lead mapping
             localStorage.setItem('token', token);
-            localStorage.setItem('user', JSON.stringify({ ...userData, role }));
+            localStorage.setItem('user', JSON.stringify({ ...userData, role, leadId }));
+
+            if (leadId) {
+                localStorage.setItem('leadId', leadId);
+            }
 
             // Redirect based on role
             if (role === 'admin') {
